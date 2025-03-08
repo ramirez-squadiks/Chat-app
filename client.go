@@ -17,15 +17,15 @@ func handleConnection(w http.ResponseWriter, r *http.Request) {
         return
     }
     client := &Client{conn: conn, send: make(chan []byte)}
-    hub.register(client) // Регистрация клиента в хабе
+    hub.register(client) 
 
-    go client.writeMessages() // Запускаем горутину для отправки сообщений
-    client.readMessages() // Чтение сообщений от клиента
+    go client.writeMessages() 
+    client.readMessages() 
 }
 
 func (c *Client) readMessages() {
     defer func() {
-        hub.unregister(c) // Удаляем клиента из хаба
+        hub.unregister(c) 
         c.conn.Close()
     }()
     for {
@@ -33,7 +33,7 @@ func (c *Client) readMessages() {
         if err != nil {
             break
         }
-        hub.broadcast <- msg // Отправляем сообщение в хаб
+        hub.broadcast <- msg 
     }
 }
 
